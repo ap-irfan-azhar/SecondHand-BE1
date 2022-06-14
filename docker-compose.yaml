@@ -1,0 +1,25 @@
+version: '3.9'
+
+services:
+  postgres:
+    container_name: postgres_container
+    image: postgres
+    environment:
+      POSTGRES_USER: 'admin'
+      POSTGRES_PASSWORD: 'qwerty123'
+      POSTGRES_DB: 'secondhand'
+      PDDATA: /var/lib/postgresql/data
+    volumes:
+        - ./data/postgres:/var/lib/postgresql/data
+    ports:
+        - "5432:5432"
+    networks:
+        - secondhand_postgres
+    restart: unless-stopped
+
+networks:
+    secondhand_postgres:
+        driver: bridge
+
+volumes:
+  postgres:
