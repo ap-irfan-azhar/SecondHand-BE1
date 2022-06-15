@@ -11,5 +11,4 @@ public class SecondHandApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SecondHandApplication.class, args);
 	}
-
 }
