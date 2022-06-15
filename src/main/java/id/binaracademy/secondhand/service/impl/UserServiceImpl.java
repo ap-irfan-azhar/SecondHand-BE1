@@ -79,6 +79,7 @@ public class UserServiceImpl implements UserService {
         if (existingUser.isEmpty()) {
             throw new IllegalArgumentException(
                     String.format("User with id %s not found", id.toString())
+
             );
         }
         String encryptedPassword = bCryptPasswordEncoder.encode(user.getPassword());
@@ -112,6 +113,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public String login(String username, String password) {
         String message;
+
         User user = findUserByUsername(username);
         String encryptedPassword = bCryptPasswordEncoder.encode(password);
         if (user.getPassword().equals(encryptedPassword)) {
