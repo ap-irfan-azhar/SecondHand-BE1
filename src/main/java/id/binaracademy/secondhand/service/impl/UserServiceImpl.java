@@ -9,8 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -33,11 +32,16 @@ public class UserServiceImpl implements UserService {
                     String.format("User with username %s already exists", user.getUsername())
             );
         }
+        Role userRole = roleService.findRoleByName("BUYER");
+        Collection<Role> roles = new ArrayList<>(Arrays.asList(
+                userRole
+        ));
         String encryptedPassword = bCryptPasswordEncoder.encode(user.getPassword());
         User userToSave = new User();
         userToSave.setUsername(user.getUsername());
         userToSave.setEmail(user.getEmail());
         userToSave.setPassword(encryptedPassword);
+        userToSave.setRoles(roles);
 
         return userRepository.save(userToSave);
     }
@@ -47,7 +51,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) {
             throw new IllegalArgumentException(
-                    String.format("User with id %f not found", id)
+                    String.format("User with id %s not found", id.toString())
             );
         }
         return user.get();
@@ -74,7 +78,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> existingUser = userRepository.findById(id);
         if (existingUser.isEmpty()) {
             throw new IllegalArgumentException(
-                    String.format("User with id %s not found", id)
+                    String.format("User with id %s not found", id.toString())
             );
         }
         String encryptedPassword = bCryptPasswordEncoder.encode(user.getPassword());
@@ -91,7 +95,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) {
             throw new IllegalArgumentException(
-                    String.format("User with id %s not found", id)
+                    String.format("User with id %s not found", id.toString())
             );
         }
         userRepository.deleteById(id);
@@ -107,7 +111,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String login(String username, String password) {
-        String message = "";
+        String message;
         User user = findUserByUsername(username);
         String encryptedPassword = bCryptPasswordEncoder.encode(password);
         if (user.getPassword().equals(encryptedPassword)) {
