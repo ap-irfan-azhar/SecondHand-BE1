@@ -29,7 +29,7 @@ public class UserController {
         return userService.findUserById(id);
     }
 
-    @PostMapping("/")
+    @PostMapping("/register")
     public User registerUser(@RequestBody PostUserDto user) {
         return userService.saveUser(user);
     }
@@ -62,10 +62,5 @@ public class UserController {
     @PostMapping("/role/")
     public Role addRole(@RequestParam String roleName) {
         return roleService.saveRole(roleName);
-    }
-
-    @PostMapping("/login")
-    public String login(@RequestParam String username, @RequestParam String password ) {
-        return userService.login(username, password);
     }
 }
