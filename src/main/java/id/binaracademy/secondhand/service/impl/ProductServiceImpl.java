@@ -85,5 +85,17 @@ public class ProductServiceImpl implements ProductService {
         productRepository.delete(product.get());
 
     }
+
+    @Override
+    public List<Product> findByNameLike(String name) {
+        List<Product> product = productRepository.findByNameLike(name);
+        if (product.isEmpty()) {
+            throw new IllegalArgumentException(
+                    String.format("Product with name %s not found", name)
+            );
+        }
+        return product;
+    }
+
 }
 

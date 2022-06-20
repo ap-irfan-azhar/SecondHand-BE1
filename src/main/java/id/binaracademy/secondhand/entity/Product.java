@@ -16,7 +16,7 @@ import java.util.Collection;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id", nullable = false,unique = true)
     private Long id;
 
     @Column(name = "name", nullable = false)
