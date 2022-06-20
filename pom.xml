@@ -14,7 +14,7 @@
 	<name>secondHand</name>
 	<description>Project akhir kelompok 1 FEJS 7 x BEJ 3</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>8</java.version>
 	</properties>
 	<dependencies>
 		<dependency>

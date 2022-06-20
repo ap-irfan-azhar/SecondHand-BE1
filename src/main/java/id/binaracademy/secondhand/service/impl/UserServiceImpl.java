@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User findUserById(Long id) {
         Optional<User> user = userRepository.findById(id);
-        if (user.isEmpty()) {
+        if (!user.isPresent()) {
             throw new IllegalArgumentException(
                     String.format("User with id %s not found", id.toString())
             );
@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User findUserByUsername(String username) {
         Optional<User> user = userRepository.findByUsername(username);
-        if (user.isEmpty()) {
+        if (!user.isPresent()) {
             throw new IllegalArgumentException(
                     String.format("User with username %s not found", username)
             );
@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User updateUser(Long id, PostUserDto user) {
         Optional<User> existingUser = userRepository.findById(id);
-        if (existingUser.isEmpty()) {
+        if (!existingUser.isPresent()) {
             throw new IllegalArgumentException(
                     String.format("User with id %s not found", id.toString())
 
@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public void deleteUser(Long id) {
         Optional<User> user = userRepository.findById(id);
-        if (user.isEmpty()) {
+        if (!user.isPresent()) {
             throw new IllegalArgumentException(
                     String.format("User with id %s not found", id.toString())
             );
