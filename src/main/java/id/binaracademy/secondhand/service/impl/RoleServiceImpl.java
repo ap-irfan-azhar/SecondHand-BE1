@@ -37,7 +37,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role findRoleById(Long id) {
         Optional<Role> role = roleRepository.findById(id);
-        if (role.isEmpty()) {
+        if (!role.isPresent()) {
             throw new IllegalArgumentException(
                     String.format("Role with id %s not found", id)
             );
@@ -48,7 +48,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role findRoleByName(String name) {
         Optional<Role> role = roleRepository.findByName(name);
-        if (role.isEmpty()) {
+        if (!role.isPresent()) {
             throw new IllegalArgumentException(
                     String.format("Role with name %s not found", name)
             );
@@ -70,7 +70,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public void deleteRole(Long id) {
         Optional<Role> role = roleRepository.findById(id);
-        if (role.isEmpty()) {
+        if (!role.isPresent()) {
             throw new IllegalArgumentException(
                     String.format("Role with id %s not found", id)
             );
