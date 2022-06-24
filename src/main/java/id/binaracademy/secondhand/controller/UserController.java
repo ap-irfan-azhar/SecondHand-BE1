@@ -1,6 +1,7 @@
 package id.binaracademy.secondhand.controller;
 
-import id.binaracademy.secondhand.dto.PostUserDto;
+import id.binaracademy.secondhand.dto.UserInfoDto;
+import id.binaracademy.secondhand.dto.UserRegisterDto;
 import id.binaracademy.secondhand.entity.Role;
 import id.binaracademy.secondhand.entity.User;
 import id.binaracademy.secondhand.service.impl.RoleServiceImpl;
@@ -24,19 +25,34 @@ public class UserController {
         return userService.findAllUsers();
     }
 
+    @GetMapping("/info")
+    public List<UserInfoDto> findAllUserDtos() {
+        return userService.findAllUserInfoDtos();
+    }
+
     @GetMapping("/{id}")
     public User findUserById(@PathVariable Long id) {
         return userService.findUserById(id);
     }
 
+    @GetMapping("/{id}/info")
+    public UserInfoDto findUserInfoDto(@PathVariable Long id) {
+        return userService.findUserInfoDtoById(id);
+    }
+
     @PostMapping("/register")
-    public User registerUser(@RequestBody PostUserDto user) {
+    public User registerUser(@RequestBody UserRegisterDto user) {
         return userService.saveUser(user);
     }
 
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody PostUserDto user) {
+    public User updateUser(@PathVariable Long id, @RequestBody UserRegisterDto user) {
         return userService.updateUser(id, user);
+    }
+
+    @PutMapping("/{id}/info")
+    public User updateUserInfo(@PathVariable Long id, UserInfoDto userInfoDto) {
+        return userService.updateUserInfo(id, userInfoDto);
     }
 
     @PutMapping("/{id}/add_role")
