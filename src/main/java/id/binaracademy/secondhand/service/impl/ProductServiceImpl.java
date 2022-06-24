@@ -19,14 +19,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product saveProduct(ProductDto product) {
-       Product ProductToSave = new Product();
-       ProductToSave.setName(product.getName());
-       ProductToSave.setPrice(product.getPrice());
-       ProductToSave.setCategoriesId(product.getCategoriesId());
-       ProductToSave.setDescription(product.getDescription());
-       ProductToSave.setStatus(product.getStatus());
+       Product productToSave = new Product();
+       productToSave.setName(product.getName());
+       productToSave.setPrice(product.getPrice());
+       productToSave.setCategoriesId(product.getCategoriesId());
+       productToSave.setDescription(product.getDescription());
+       productToSave.setStatus(product.getStatus());
 
-        return productRepository.save(ProductToSave);
+        return productRepository.save(productToSave);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product findProductById(Long id) {
         Optional<Product> product = productRepository.findById(id);
-        if (product.isEmpty()) {
+        if (!product.isPresent()) {
             throw new IllegalArgumentException(
                     String.format("Product with id %s not found", id)
             );
@@ -48,7 +48,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product findProductByName(String name) {
         Optional<Product> product = productRepository.findByName(name);
-        if (product.isEmpty()) {
+        if (!product.isPresent()) {
             throw new IllegalArgumentException(
                     String.format("Product with name %s not found", name)
             );
@@ -59,7 +59,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product updateProduct(Long id, ProductDto product) {
         Optional<Product> existingProduct = productRepository.findById(id);
-        if (existingProduct.isEmpty()) {
+        if (!existingProduct.isPresent()) {
             throw new IllegalArgumentException(
                     String.format("Product with id %s not found", id)
             );
@@ -77,7 +77,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProduct(Long id) {
         Optional<Product> product = productRepository.findById(id);
-        if (product.isEmpty()) {
+        if (!product.isPresent()) {
             throw new IllegalArgumentException(
                     String.format("Product with id %s not found", id)
             );
