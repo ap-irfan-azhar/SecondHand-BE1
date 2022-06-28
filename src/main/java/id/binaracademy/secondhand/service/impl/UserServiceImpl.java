@@ -1,6 +1,7 @@
 package id.binaracademy.secondhand.service.impl;
 
-import id.binaracademy.secondhand.dto.PostUserDto;
+import id.binaracademy.secondhand.dto.UserInfoDto;
+import id.binaracademy.secondhand.dto.UserRegisterDto;
 import id.binaracademy.secondhand.entity.Role;
 import id.binaracademy.secondhand.entity.User;
 import id.binaracademy.secondhand.repository.UserRepository;
@@ -29,7 +30,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 
     @Override
-    public User saveUser(PostUserDto user) {
+    public User saveUser(UserRegisterDto user) {
         Optional<User> existingUser = userRepository.findByUsername(user.getUsername());
         if (existingUser.isPresent()) {
             throw new IllegalArgumentException(
@@ -78,7 +79,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User updateUser(Long id, PostUserDto user) {
+    public User updateUser(Long id, UserRegisterDto user) {
         Optional<User> existingUser = userRepository.findById(id);
         if (!existingUser.isPresent()) {
             throw new IllegalArgumentException(
@@ -127,6 +128,53 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
         return message;
     }
+
+    @Override
+    public UserInfoDto findUserInfoDtoById(Long id) {
+        User user = findUserById(id);
+        return new UserInfoDto(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getRoles(),
+                user.getCity(),
+                user.getAddress(),
+                user.getPhoneNumber()
+        );
+    }
+
+    @Override
+    public List<UserInfoDto> findAllUserInfoDtos() {
+        List<User> users = findAllUsers();
+        List<UserInfoDto> userInfoDtos = new ArrayList<>();
+        for (User user: users) {
+            userInfoDtos.add(
+                    new UserInfoDto(
+                            user.getId(),
+                            user.getUsername(),
+                            user.getEmail(),
+                            user.getRoles(),
+                            user.getCity(),
+                            user.getAddress(),
+                            user.getPhoneNumber()
+                    )
+            );
+        }
+        return userInfoDtos;
+    }
+
+    @Override
+    public User updateUserInfo(Long id, UserInfoDto userInfoDto) {
+        User existingUser = findUserById(id);
+        existingUser.setEmail(userInfoDto.getEmail());
+        existingUser.setUsername(userInfoDto.getUsername());
+        existingUser.setRoles(userInfoDto.getRoles());
+        existingUser.setCity(userInfoDto.getCity());
+        existingUser.setAddress(userInfoDto.getAddress());
+        existingUser.setPhoneNumber(userInfoDto.getPhoneNumber());
+        return userRepository.save(existingUser);
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
