@@ -11,6 +11,7 @@ public interface UserService {
     User saveUser(UserRegisterDto user);
     User findUserById(Long id);
     User findUserByUsername(String username);
+    User findUserByEmail(String email);
     List<User> findAllUsers();
     User updateUser(Long id, UserRegisterDto user);
     void deleteUser(Long id);
