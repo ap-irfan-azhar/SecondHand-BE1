@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
@@ -31,12 +32,29 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User saveUser(UserRegisterDto user) {
-        Optional<User> existingUser = userRepository.findByUsername(user.getUsername());
-        if (existingUser.isPresent()) {
+        String emailRegexPattern = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
+        Optional<User> foundUserByUsername = userRepository.findByUsername(user.getUsername());
+        Optional<User> foundUserByEmail = userRepository.findByEmail(user.getEmail());
+
+        boolean isEmailValid = Pattern
+                .compile(emailRegexPattern)
+                .matcher(user.getEmail())
+                .matches();
+
+        if (!isEmailValid) {
+            throw new IllegalArgumentException("email is not valid");
+        }
+
+        if (foundUserByUsername.isPresent()) {
             throw new IllegalArgumentException(
                     String.format("User with username %s already exists", user.getUsername())
             );
+        } else if (foundUserByEmail.isPresent()) {
+            throw new IllegalArgumentException(
+                    String.format("User with email %s already exists", user.getEmail())
+            );
         }
+
         Role userRole = roleService.findRoleByName("BUYER");
         Collection<Role> roles = new ArrayList<>(Arrays.asList(
                 userRole
@@ -72,6 +90,18 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
         return user.get();
     }
+
+    @Override
+    public User findUserByEmail(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (!user.isPresent()) {
+            throw new IllegalArgumentException(
+                    String.format("User with email %s not found", email)
+            );
+        }
+        return user.get();
+    }
+
 
     @Override
     public List<User> findAllUsers() {
@@ -177,13 +207,21 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username).orElse(null);
+    public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
+        String emailRegexPattern = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
+        User user = null;
+
+        if (Pattern.compile(emailRegexPattern).matcher(usernameOrEmail).matches()) {
+            user = findUserByEmail(usernameOrEmail);
+        } else {
+            user = findUserByUsername(usernameOrEmail);
+        }
+
         if (user == null) {
             throw new UsernameNotFoundException(
                     String.format(
                             "User with username %s not found",
-                            username
+                            usernameOrEmail
                     )
             );
         }
