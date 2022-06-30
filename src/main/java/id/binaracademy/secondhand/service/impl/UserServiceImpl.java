@@ -7,6 +7,7 @@ import id.binaracademy.secondhand.entity.User;
 import id.binaracademy.secondhand.repository.UserRepository;
 import id.binaracademy.secondhand.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -104,8 +105,26 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 
     @Override
-    public List<User> findAllUsers() {
-        return userRepository.findAll();
+    public Page<User> findAllUsers(int page, int size, String sortParameter, String sortType) {
+        String sortBy;
+        if (sortParameter == "username" ||
+                sortParameter == "city" ||
+                sortParameter == "address" ||
+                sortParameter == "phoneNumber"
+        ) {
+            sortBy = sortParameter;
+        } else {
+            sortBy = "id";
+        }
+        Sort sort = sortType == "desc"
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                Sort.by(sortBy).descending()
+            );
+        return userRepository.findAll(pageable);
     }
 
     @Override
@@ -175,7 +194,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public List<UserInfoDto> findAllUserInfoDtos() {
-        List<User> users = findAllUsers();
+        List<User> users = userRepository.findAll();
         List<UserInfoDto> userInfoDtos = new ArrayList<>();
         for (User user: users) {
             userInfoDtos.add(
