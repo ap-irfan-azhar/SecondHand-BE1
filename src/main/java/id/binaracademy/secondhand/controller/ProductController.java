@@ -5,6 +5,7 @@ import id.binaracademy.secondhand.entity.Product;
 import id.binaracademy.secondhand.repository.ProductRepository;
 import id.binaracademy.secondhand.service.impl.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -59,7 +60,7 @@ public class ProductController {
 //    public Product registerProduct1(@RequestBody ProductDto product){
 //        return productService.saveProduct(product);
 //    }
-@PostMapping("/register")
+    @RequestMapping(value = "/register", method = RequestMethod.POST, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public Product registerProduct(@RequestPart("file")MultipartFile file, @RequestPart ProductDto product) throws Exception{
         return productService.saveProduct(file,product);
 
