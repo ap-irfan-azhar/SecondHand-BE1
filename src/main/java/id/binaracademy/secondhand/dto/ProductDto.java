@@ -11,4 +11,5 @@ public class ProductDto implements Serializable {
     private final Long categoriesId;
     private final String description;
     private final String status;
+    private final String photoUrl;
 }

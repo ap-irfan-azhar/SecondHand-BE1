@@ -7,6 +7,7 @@ import id.binaracademy.secondhand.service.impl.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -54,8 +55,13 @@ public class ProductController {
         productService.deleteProduct(id);
     }
 
-    @PostMapping("/")
-    public Product registerProduct(@RequestBody ProductDto product){
-        return productService.saveProduct(product);
-    }
+//    @PostMapping("/")
+//    public Product registerProduct1(@RequestBody ProductDto product){
+//        return productService.saveProduct(product);
+//    }
+@PostMapping("/register")
+    public Product registerProduct(@RequestPart("file")MultipartFile file, @RequestPart ProductDto product) throws Exception{
+        return productService.saveProduct(file,product);
+
+}
 }

@@ -1,13 +1,17 @@
 package id.binaracademy.secondhand.service.impl;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import id.binaracademy.secondhand.dto.ProductDto;
 import id.binaracademy.secondhand.entity.Product;
 import id.binaracademy.secondhand.repository.ProductRepository;
 import id.binaracademy.secondhand.service.interfaces.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -16,15 +20,31 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository productRepository;
 
+    Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
+            "cloud_name", "dzxhgmtvs",
+            "api_key", "377982552887464",
+            "api_secret", "lN_JpQY_gABvIjSPsbVtiBQov3k",
+            "secure", true));
+
 
     @Override
-    public Product saveProduct(ProductDto product) {
+    public Product saveProduct(MultipartFile file,ProductDto product) throws Exception {
+
        Product productToSave = new Product();
        productToSave.setName(product.getName());
        productToSave.setPrice(product.getPrice());
        productToSave.setCategoriesId(product.getCategoriesId());
        productToSave.setDescription(product.getDescription());
        productToSave.setStatus(product.getStatus());
+        String imageUrl;
+        try {
+            Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+            imageUrl = (String) uploadResult.get("url");
+            productToSave.setPhotoUrl(imageUrl);
+        } catch (Exception e) {
+            throw new Exception("couldn't save photos");
+        }
+        productToSave.setPhotoUrl(imageUrl);
 
         return productRepository.save(productToSave);
     }
