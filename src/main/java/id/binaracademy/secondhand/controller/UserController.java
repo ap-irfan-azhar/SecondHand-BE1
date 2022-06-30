@@ -6,10 +6,16 @@ import id.binaracademy.secondhand.entity.Role;
 import id.binaracademy.secondhand.entity.User;
 import id.binaracademy.secondhand.service.impl.RoleServiceImpl;
 import id.binaracademy.secondhand.service.impl.UserServiceImpl;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user")
@@ -21,8 +27,22 @@ public class UserController {
     private RoleServiceImpl roleService;
 
     @GetMapping("/")
-    public List<User> findAllUsers() {
-        return userService.findAllUsers();
+    public ResponseEntity<Map<String, Object>> findAllUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortType
+    ) {
+        Page<User> pageUser = userService.findAllUsers(page, size, sortBy, sortType);
+        if (pageUser.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        Map<String, Object> response = new HashMap<>();
+        response.put("users", pageUser.getContent());
+        response.put("currentPage", pageUser.getNumber());
+        response.put("totalItem", pageUser.getTotalElements());
+        response.put("totalPage", pageUser.getTotalPages());
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/info")
