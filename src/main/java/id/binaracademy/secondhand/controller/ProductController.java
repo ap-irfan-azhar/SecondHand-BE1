@@ -61,8 +61,8 @@ public class ProductController {
 //        return productService.saveProduct(product);
 //    }
     @RequestMapping(value = "/register", method = RequestMethod.POST, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public Product registerProduct(@RequestParam("file")MultipartFile file, @RequestBody ProductDto product) throws Exception{
-        return productService.saveProduct(file,product);
+    public Product registerProduct(@RequestBody ProductDto product) throws Exception{
+        return productService.saveProduct(product);
 
 }
 }

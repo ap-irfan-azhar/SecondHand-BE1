@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface ProductService {
-    Product saveProduct(MultipartFile file,ProductDto product) throws Exception;
+    Product saveProduct(ProductDto product) throws Exception;
     List<Product> findAllProducts();
     Product findProductById(Long id);
     Product findProductByName(String name);

@@ -28,7 +28,7 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public Product saveProduct(MultipartFile file,ProductDto product) throws Exception {
+    public Product saveProduct(ProductDto product) throws Exception {
 
        Product productToSave = new Product();
        productToSave.setName(product.getName());
@@ -38,7 +38,7 @@ public class ProductServiceImpl implements ProductService {
        productToSave.setStatus(product.getStatus());
         String imageUrl;
         try {
-            Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+            Map uploadResult = cloudinary.uploader().upload(product.getFile().getBytes(), ObjectUtils.emptyMap());
             imageUrl = (String) uploadResult.get("url");
             productToSave.setPhotoUrl(imageUrl);
         } catch (Exception e) {
