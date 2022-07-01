@@ -36,7 +36,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Page<Category> findAllCategories(int page, int size, String sortBy, String sortType) {
         Sort sort;
-        if (sortType == "desc") {
+        if (sortType.equals("desc")) {
             sort = Sort.by(sortBy).descending();
         } else {
             sort = Sort.by(sortBy).ascending();

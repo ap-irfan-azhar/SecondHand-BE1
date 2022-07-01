@@ -6,6 +6,9 @@ import id.binaracademy.secondhand.dto.UserRegisterDto;
 import id.binaracademy.secondhand.entity.User;
 import org.springframework.data.domain.Page;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 public interface UserService {
@@ -22,5 +25,6 @@ public interface UserService {
     List<UserInfoDto> findAllUserInfoDtos();
 
     User updateUserInfo(Long id, UserInfoDto userInfoDto);
+    void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException;
 }
 
