@@ -61,7 +61,7 @@ public class ProductController {
 //        return productService.saveProduct(product);
 //    }
     @RequestMapping(value = "/register", method = RequestMethod.POST, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public Product registerProduct(@RequestBody ProductDto product) throws Exception{
+    public Product registerProduct(@ModelAttribute ProductDto product) throws Exception{
         return productService.saveProduct(product);
 
 }
