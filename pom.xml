@@ -66,6 +66,13 @@
 			<artifactId>java-jwt</artifactId>
 			<version>3.19.1</version>
 		</dependency>
+
+		<dependency>
+			<groupId>com.cloudinary</groupId>
+			<artifactId>cloudinary-http44</artifactId>
+			<version>1.29.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

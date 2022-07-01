@@ -1,6 +1,7 @@
 package id.binaracademy.secondhand.dto;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
 
@@ -11,4 +12,5 @@ public class ProductDto implements Serializable {
     private final Long categoriesId;
     private final String description;
     private final String status;
+    MultipartFile file;
 }
