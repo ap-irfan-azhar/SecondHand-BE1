@@ -121,22 +121,22 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public Page<User> findAllUsers(int page, int size, String sortParameter, String sortType) {
         String sortBy;
-        if (sortParameter == "username" ||
-                sortParameter == "city" ||
-                sortParameter == "address" ||
-                sortParameter == "phoneNumber"
+        if (sortParameter.equals("username") ||
+                sortParameter.equals("city") ||
+                sortParameter.equals("address") ||
+                sortParameter.equals("phoneNumber")
         ) {
             sortBy = sortParameter;
         } else {
             sortBy = "id";
         }
-        Sort sort = sortType == "desc"
+        Sort sort = sortType.equals("desc")
                 ? Sort.by(sortBy).descending()
                 : Sort.by(sortBy).ascending();
         Pageable pageable = PageRequest.of(
                 page,
                 size,
-                Sort.by(sortBy).descending()
+                sort
             );
         return userRepository.findAll(pageable);
     }
@@ -248,7 +248,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 JWTVerifier verifier = JWT.require(algorithm).build();
                 DecodedJWT decodedJWT = verifier.verify(refreshToken);
                 String username = decodedJWT.getSubject();
-                User user = null;
+                User user;
                 try {
                     user = userRepository.findByUsername(username).get();
                 } catch (Exception e) {
