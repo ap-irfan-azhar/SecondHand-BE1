@@ -1,9 +1,7 @@
 image: maven:3-jdk-8
 
 stages:
-  - build
   - test
-  - staging
 
 maven-builds:
     image: maven:3-jdk-8
@@ -15,7 +13,7 @@ maven-builds:
 
 test:
     image: ruby:latest
-    stage: staging
+    stage: test
     before_script:
       - gem install dpl
       - wget -q0- https://cli-assets.heroku.com/install-ubuntu.sh | sh
