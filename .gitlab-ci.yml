@@ -2,7 +2,7 @@ image: maven:3-jdk-11
 
 stages:
   - build
-  - unit-test
+  - test
   - staging
 
 maven-builds:
