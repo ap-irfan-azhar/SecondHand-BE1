@@ -60,4 +60,5 @@ public class ProductController {
     public Product registerProduct(@ModelAttribute ProductDto product) throws Exception{
         return productService.saveProduct(product);
     }
+
 }
