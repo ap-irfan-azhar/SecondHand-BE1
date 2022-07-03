@@ -1,4 +1,4 @@
-image: maven:3-jdk-11
+image: maven:3-jdk-8
 
 stages:
   - build
@@ -8,13 +8,13 @@ stages:
 maven-builds:
     image: maven:3-jdk-8
     stage: build
-    script: "mvn --batch-mode -- errors --fail-fast --fail-at-end --show-version -installAtEnd-false - deplotAtEnd-false clean compile"
+    script: "mvn --batch-mode -- errors --fail-fast --fail-at-end --show-version -installAtEnd-false - deployAtEnd-false clean compile"
     artifacts:
       paths:
         - target/*.jar
 
 test:
-    image: maven
+    image: ruby:latest
     stage: staging
     before_script:
       - gem install dpl
