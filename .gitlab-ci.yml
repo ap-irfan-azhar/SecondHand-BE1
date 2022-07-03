@@ -9,7 +9,7 @@ test:
     stage: test
     before_script:
       - gem install dpl
-      - wget -q0- https://cli-assets.heroku.com/install-ubuntu.sh | sh
+      - wget -qO- https://cli-assets.heroku.com/install-ubuntu.sh | sh
     script :
         - dpl --provider-heroku --app=$HEROKU_APPNAME --api-key=$HEROKU_APIKEY
         - export HEROKU_API_KEY=$HEROKU_APIKEY
