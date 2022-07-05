@@ -15,6 +15,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import static org.springframework.http.HttpMethod.POST;
+
 
 @Configuration
 @EnableWebSecurity
@@ -42,6 +44,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/user/register",
                         "/api/user/refresh_token"
                         )
+                .permitAll();
+        http.authorizeRequests()
+                .antMatchers(POST, "/api/user/role/")
                 .permitAll();
         http.authorizeRequests()
                 .antMatchers("/api/**")
