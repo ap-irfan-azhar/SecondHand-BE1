@@ -1,9 +1,10 @@
 package id.binaracademy.secondhand.controller;
 
-import id.binaracademy.secondhand.dto.UserInfoDto;
+import id.binaracademy.secondhand.dto.UpdateUserInfoDto;
 import id.binaracademy.secondhand.dto.UserRegisterDto;
 import id.binaracademy.secondhand.entity.Role;
 import id.binaracademy.secondhand.entity.User;
+import id.binaracademy.secondhand.entity.UserInfo;
 import id.binaracademy.secondhand.service.impl.RoleServiceImpl;
 import id.binaracademy.secondhand.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class UserController {
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "asc") String sortType
     ) {
-        Page<User> pageUser = userService.findAllUsers(page, size, sortBy, sortType);
+        Page<UserInfo> pageUser = userService.findAllUsers(page, size, sortBy, sortType);
         if (pageUser.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -47,19 +48,9 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/info")
-    public List<UserInfoDto> findAllUserDtos() {
-        return userService.findAllUserInfoDtos();
-    }
-
     @GetMapping("/{id}")
-    public User findUserById(@PathVariable Long id) {
+    public UserInfo findUserById(@PathVariable Long id) {
         return userService.findUserById(id);
-    }
-
-    @GetMapping("/{id}/info")
-    public UserInfoDto findUserInfoDto(@PathVariable Long id) {
-        return userService.findUserInfoDtoById(id);
     }
 
     @PostMapping("/register")
@@ -68,18 +59,13 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody UserRegisterDto user) {
+    public UserInfo updateUser(@PathVariable Long id, @RequestBody UpdateUserInfoDto user) {
         return userService.updateUser(id, user);
     }
 
-    @PutMapping("/{id}/info")
-    public User updateUserInfo(@PathVariable Long id, UserInfoDto userInfoDto) {
-        return userService.updateUserInfo(id, userInfoDto);
-    }
-
-    @PutMapping("/{id}/add_role")
-    public User addRoleToUser(@PathVariable Long userId, @RequestParam String roleName) {
-        return userService.addRoleToUser(userId, roleName);
+    @PutMapping("{id}/register_as_seller")
+    public UserInfo registerAsSeller(@PathVariable Long id) {
+        return userService.registerAsSeller(id);
     }
 
     @DeleteMapping("/{id}")

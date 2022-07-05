@@ -5,10 +5,12 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import id.binaracademy.secondhand.dto.UserInfoDto;
+import id.binaracademy.secondhand.dto.UpdateUserInfoDto;
 import id.binaracademy.secondhand.dto.UserRegisterDto;
 import id.binaracademy.secondhand.entity.Role;
 import id.binaracademy.secondhand.entity.User;
+import id.binaracademy.secondhand.entity.UserInfo;
+import id.binaracademy.secondhand.repository.UserInfoRepository;
 import id.binaracademy.secondhand.repository.UserRepository;
 import id.binaracademy.secondhand.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +37,12 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
 
+    public static final String EMAIL_REGEX_PATTERN = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserInfoRepository userInfoRepository;
 
     @Autowired
     private RoleServiceImpl roleService;
@@ -47,12 +53,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User saveUser(UserRegisterDto user) {
-        String emailRegexPattern = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
         Optional<User> foundUserByUsername = userRepository.findByUsername(user.getUsername());
         Optional<User> foundUserByEmail = userRepository.findByEmail(user.getEmail());
 
         boolean isEmailValid = Pattern
-                .compile(emailRegexPattern)
+                .compile(EMAIL_REGEX_PATTERN)
                 .matcher(user.getEmail())
                 .matches();
 
@@ -85,8 +90,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User findUserById(Long id) {
-        Optional<User> user = userRepository.findById(id);
+    public UserInfo findUserById(Long id) {
+        Optional<UserInfo> user = userInfoRepository.findById(id);
         if (!user.isPresent()) {
             throw new IllegalArgumentException(
                     String.format("User with id %s not found", id.toString())
@@ -119,7 +124,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 
     @Override
-    public Page<User> findAllUsers(int page, int size, String sortParameter, String sortType) {
+    public Page<UserInfo> findAllUsers(int page, int size, String sortParameter, String sortType) {
         String sortBy;
         if (sortParameter.equals("username") ||
                 sortParameter.equals("city") ||
@@ -138,25 +143,50 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 size,
                 sort
             );
-        return userRepository.findAll(pageable);
+        return userInfoRepository.findAll(pageable);
     }
 
     @Override
-    public User updateUser(Long id, UserRegisterDto user) {
-        Optional<User> existingUser = userRepository.findById(id);
+    public UserInfo updateUser(Long id, UpdateUserInfoDto user) {
+       boolean isEmailValid = Pattern
+                .compile(EMAIL_REGEX_PATTERN)
+                .matcher(user.getEmail())
+                .matches();
+        if (!isEmailValid) {
+            throw new IllegalArgumentException("email is not valid");
+        }
+        Optional<UserInfo> existingUser = userInfoRepository.findById(id);
         if (!existingUser.isPresent()) {
-            throw new IllegalArgumentException(
+            throw new NotFoundException(
                     String.format("User with id %s not found", id.toString())
 
             );
         }
-        String encryptedPassword = bCryptPasswordEncoder.encode(user.getPassword());
-        User userToSave = existingUser.get();
+        UserInfo userToSave = existingUser.get();
+        if (!userToSave.getUsername().equals(user.getUsername())) {
+            Optional<UserInfo> foundByUsername = userInfoRepository.findByUsername(user.getUsername());
+            if (foundByUsername.isPresent()) {
+                throw new IllegalArgumentException(
+                        String.format("user with username %s is already exist", user.getUsername())
+                );
+            }
+        }
+        if (!userToSave.getEmail().equals(user.getEmail())) {
+            Optional<UserInfo> foundByEmail = userInfoRepository.findByEmail(user.getEmail());
+            if (foundByEmail.isPresent()) {
+                throw new IllegalArgumentException(
+                        String.format("user with email %s is already exist", user.getEmail())
+                );
+            }
+        }
+
         userToSave.setUsername(user.getUsername());
         userToSave.setEmail(user.getEmail());
-        userToSave.setPassword(encryptedPassword);
+        userToSave.setCity(user.getCity());
+        userToSave.setAddress(user.getAddress());
+        userToSave.setPhoneNumber(user.getPhoneNumber());
 
-        return userRepository.save(userToSave);
+        return userInfoRepository.save(userToSave);
     }
 
     @Override
@@ -171,71 +201,25 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User addRoleToUser(Long userId, String roleName) {
-        User user = findUserById(userId);
-        Role role = roleService.findRoleByName(roleName);
-        user.getRoles().add(role);
-        return userRepository.save(user);
-    }
-
-    @Override
-    public String login(String username, String password) {
-        String message;
-
-        User user = findUserByUsername(username);
-        String encryptedPassword = bCryptPasswordEncoder.encode(password);
-        if (user.getPassword().equals(encryptedPassword)) {
-            message = "login success";
-        } else {
-            message = "login failed";
+    public UserInfo registerAsSeller(Long userId) {
+        Optional<UserInfo> foundUser = userInfoRepository.findById(userId);
+        if (!foundUser.isPresent()) {
+            throw new NotFoundException(
+                    String.format("User with id: %s not found", userId)
+            );
         }
-        return message;
-    }
-
-    @Override
-    public UserInfoDto findUserInfoDtoById(Long id) {
-        User user = findUserById(id);
-        return new UserInfoDto(
-                user.getId(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getRoles(),
-                user.getCity(),
-                user.getAddress(),
-                user.getPhoneNumber()
-        );
-    }
-
-    @Override
-    public List<UserInfoDto> findAllUserInfoDtos() {
-        List<User> users = userRepository.findAll();
-        List<UserInfoDto> userInfoDtos = new ArrayList<>();
-        for (User user: users) {
-            userInfoDtos.add(
-                    new UserInfoDto(
-                            user.getId(),
-                            user.getUsername(),
-                            user.getEmail(),
-                            user.getRoles(),
-                            user.getCity(),
-                            user.getAddress(),
-                            user.getPhoneNumber()
+        UserInfo user = foundUser.get();
+        Role sellerRole = roleService.findRoleByName("SELLER");
+        if (user.getRoles().contains(sellerRole)) {
+            throw new IllegalArgumentException(
+                    String.format(
+                            "user with id %s is already a seller", user.getId()
                     )
             );
         }
-        return userInfoDtos;
-    }
-
-    @Override
-    public User updateUserInfo(Long id, UserInfoDto userInfoDto) {
-        User existingUser = findUserById(id);
-        existingUser.setEmail(userInfoDto.getEmail());
-        existingUser.setUsername(userInfoDto.getUsername());
-        existingUser.setRoles(userInfoDto.getRoles());
-        existingUser.setCity(userInfoDto.getCity());
-        existingUser.setAddress(userInfoDto.getAddress());
-        existingUser.setPhoneNumber(userInfoDto.getPhoneNumber());
-        return userRepository.save(existingUser);
+        Collection<Role> newRoles = user.getRoles();
+        newRoles.add(sellerRole);
+        return userInfoRepository.save(user);
     }
 
     @Override
@@ -281,10 +265,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
-        String emailRegexPattern = "^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
         User user = null;
 
-        if (Pattern.compile(emailRegexPattern).matcher(usernameOrEmail).matches()) {
+        if (Pattern.compile(EMAIL_REGEX_PATTERN).matcher(usernameOrEmail).matches()) {
             user = findUserByEmail(usernameOrEmail);
         } else {
             user = findUserByUsername(usernameOrEmail);
