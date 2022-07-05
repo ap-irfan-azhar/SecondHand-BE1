@@ -56,6 +56,7 @@ public class ProductController {
         productService.deleteProduct(id);
     }
 
+    @CrossOrigin
     @RequestMapping(value = "/register", method = RequestMethod.POST, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public Product registerProduct(@ModelAttribute ProductDto product) throws Exception{
         return productService.saveProduct(product);
