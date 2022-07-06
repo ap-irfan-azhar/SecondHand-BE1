@@ -47,6 +47,7 @@ public class ProductController {
         return ResponseEntity.ok(productRepository.findByNameLike(name));
     }
 
+    @CrossOrigin
     @PutMapping("/{id}")
     public Product updateProduct(@PathVariable Long id, @RequestBody ProductDto product){
         return productService.updateProduct(id, product);
