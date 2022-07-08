@@ -63,5 +63,10 @@ public class ProductController {
         return productService.saveProduct(product);
     }
 
+    @CrossOrigin
+    @RequestMapping(value = "/update1", method = RequestMethod.PUT, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public Product updateProduct1(@PathVariable Long id, @ModelAttribute ProductDto product) throws Exception {
+        return productService.updateProduct(id, product);
+    }
 
 }
