@@ -80,6 +80,7 @@ public class ProductServiceImpl implements ProductService {
     public Product updateProduct(Long id, ProductDto product) throws Exception {
         Optional<Product> existingProduct = productRepository.findById(id);
         Product product1;
+        System.out.println("[!] existingProduct:"+existingProduct.isPresent());
         if (existingProduct.isPresent()) {
             product1 = existingProduct.get();
             product1.setName(product.getName());
@@ -98,7 +99,7 @@ public class ProductServiceImpl implements ProductService {
             product1.setPhotoUrl(imageUrl);
             return productRepository.save(product1);
 
-        }
+        }else
         throw new Exception("Product could not be found");
     }
 
