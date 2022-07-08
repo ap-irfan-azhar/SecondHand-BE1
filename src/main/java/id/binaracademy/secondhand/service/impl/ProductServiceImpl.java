@@ -86,6 +86,15 @@ public class ProductServiceImpl implements ProductService {
             productToUpdate.setCategoriesId(product.getCategoriesId());
             productToUpdate.setDescription(product.getDescription());
             productToUpdate.setStatus(product.getStatus());
+            String imageUrl;
+            try {
+                Map uploadResult = cloudinary.uploader().upload(product.getFile().getBytes(), ObjectUtils.emptyMap());
+                imageUrl = (String) uploadResult.get("url");
+                productToUpdate.setPhotoUrl(imageUrl);
+            } catch (Exception e) {
+                throw new Exception("couldn't save photos");
+            }
+            productToUpdate.setPhotoUrl(imageUrl);
             return productRepository.save(productToUpdate);
 
         }
