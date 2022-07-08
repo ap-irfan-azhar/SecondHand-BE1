@@ -77,12 +77,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product updateProduct(Long id, ProductDto product) {
+    public Product updateProduct(Long id, ProductDto product) throws Exception {
         Optional<Product> existingProduct = productRepository.findById(id);
         if (!existingProduct.isPresent()) {
-            throw new IllegalArgumentException(
-                    String.format("Product with id %s not found", id)
-            );
+            throw new Exception("could not update product");
+
         }
         Product productToUpdate = existingProduct.get();
         productToUpdate.setName(product.getName());

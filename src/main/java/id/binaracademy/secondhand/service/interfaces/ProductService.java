@@ -11,7 +11,7 @@ public interface ProductService {
     List<Product> findAllProducts();
     Product findProductById(Long id);
     Product findProductByName(String name);
-    Product updateProduct(Long id, ProductDto product);
+    Product updateProduct(Long id, ProductDto product) throws Exception;
     void deleteProduct(Long id);
     List<Product> findByNameLike(String name);
 
