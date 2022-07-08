@@ -49,7 +49,7 @@ public class ProductController {
 
     @CrossOrigin
     @PutMapping("/{id}")
-    public Product updateProduct(@PathVariable Long id, @RequestBody ProductDto product){
+    public Product updateProduct(@PathVariable Long id, @ModelAttribute ProductDto product) throws Exception {
         return productService.updateProduct(id, product);
     }
     @DeleteMapping("/{id}")
