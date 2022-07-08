@@ -79,18 +79,17 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product updateProduct(Long id, ProductDto product) throws Exception {
         Optional<Product> existingProduct = productRepository.findById(id);
-        if (!existingProduct.isPresent()) {
-            throw new Exception("Product could not be found");
+        if (existingProduct.isPresent()) {
+            Product productToUpdate = existingProduct.get();
+            productToUpdate.setName(product.getName());
+            productToUpdate.setPrice(product.getPrice());
+            productToUpdate.setCategoriesId(product.getCategoriesId());
+            productToUpdate.setDescription(product.getDescription());
+            productToUpdate.setStatus(product.getStatus());
+            return productRepository.save(productToUpdate);
 
         }
-        Product productToUpdate = existingProduct.get();
-        productToUpdate.setName(product.getName());
-        productToUpdate.setPrice(product.getPrice());
-        productToUpdate.setCategoriesId(product.getCategoriesId());
-        productToUpdate.setDescription(product.getDescription());
-        productToUpdate.setStatus(product.getStatus());
-
-        return productRepository.save(productToUpdate);
+        throw new Exception("Product could not be found");
     }
 
     @Override
