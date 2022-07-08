@@ -80,7 +80,7 @@ public class ProductServiceImpl implements ProductService {
     public Product updateProduct(Long id, ProductDto product) throws Exception {
         Optional<Product> existingProduct = productRepository.findById(id);
         if (!existingProduct.isPresent()) {
-            throw new Exception("could not update product");
+            throw new Exception("Product could not be found");
 
         }
         Product productToUpdate = existingProduct.get();
