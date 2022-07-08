@@ -79,23 +79,24 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product updateProduct(Long id, ProductDto product) throws Exception {
         Optional<Product> existingProduct = productRepository.findById(id);
+        Product product1;
         if (existingProduct.isPresent()) {
-            Product productToUpdate = existingProduct.get();
-            productToUpdate.setName(product.getName());
-            productToUpdate.setPrice(product.getPrice());
-            productToUpdate.setCategoriesId(product.getCategoriesId());
-            productToUpdate.setDescription(product.getDescription());
-            productToUpdate.setStatus(product.getStatus());
+            product1 = existingProduct.get();
+            product1.setName(product.getName());
+            product1.setPrice(product.getPrice());
+            product1.setCategoriesId(product.getCategoriesId());
+            product1.setDescription(product.getDescription());
+            product1.setStatus(product.getStatus());
             String imageUrl;
             try {
                 Map uploadResult = cloudinary.uploader().upload(product.getFile().getBytes(), ObjectUtils.emptyMap());
                 imageUrl = (String) uploadResult.get("url");
-                productToUpdate.setPhotoUrl(imageUrl);
+                product1.setPhotoUrl(imageUrl);
             } catch (Exception e) {
                 throw new Exception("couldn't save photos");
             }
-            productToUpdate.setPhotoUrl(imageUrl);
-            return productRepository.save(productToUpdate);
+            product1.setPhotoUrl(imageUrl);
+            return productRepository.save(product1);
 
         }
         throw new Exception("Product could not be found");
