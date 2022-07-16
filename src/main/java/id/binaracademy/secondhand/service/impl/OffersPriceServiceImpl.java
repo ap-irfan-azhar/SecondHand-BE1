@@ -37,6 +37,7 @@ public class OffersPriceServiceImpl implements OffersPriceService {
     @Override
     public List<OffersPrice> findAllOffersByProductId(Long id) {
         Optional<OffersPrice> offersPrice = offersPriceRepository.findById(id);
+
         if (offersPrice.isPresent()) {
             return offersPriceRepository.findAllByProductId(id);
         } else {
