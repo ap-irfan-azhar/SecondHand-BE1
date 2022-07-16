@@ -1,6 +1,5 @@
 package id.binaracademy.secondhand.service.impl;
 
-import id.binaracademy.secondhand.dto.OffersPriceDto;
 import id.binaracademy.secondhand.dto.OffersPriceDto1;
 import id.binaracademy.secondhand.entity.OffersPrice;
 import id.binaracademy.secondhand.repository.OffersPriceRepository;
