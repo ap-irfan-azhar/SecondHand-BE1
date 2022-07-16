@@ -36,6 +36,7 @@ public class ProductServiceImpl implements ProductService {
        productToSave.setCategoriesId(product.getCategoriesId());
        productToSave.setDescription(product.getDescription());
        productToSave.setStatus(product.getStatus());
+       productToSave.setSellerId(product.getSellerId());
         String imageUrl;
         try {
             Map uploadResult = cloudinary.uploader().upload(product.getFile().getBytes(), ObjectUtils.emptyMap());

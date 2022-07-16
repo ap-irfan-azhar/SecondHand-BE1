@@ -8,6 +8,7 @@ import java.io.Serializable;
 public class OffersPriceDto implements Serializable {
     private final Long productId;
     private final Long buyers_Id;
+    private final Long sellers_Id;
     private final int buyers_price;
     private final boolean status;
 }

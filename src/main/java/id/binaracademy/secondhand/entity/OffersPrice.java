@@ -17,14 +17,15 @@ public class OffersPrice {
     @Column(name = "offers_id", nullable = false)
     private Long offersId;
 
+    @Column(name = "product_id", nullable = false)
     private Long productId;
-    private Long buyers_Id;
-    private int buyers_price;
-    private boolean status;
-
-
-
-
-
+    @Column(name = "buyers_id", nullable = false)
+    private Long buyersId;
+    @Column(name = "sellers_id", nullable = false)
+    private Long sellersId;
+    @Column(name = "buyers_price", nullable = false)
+    private int buyersPrice;
+    @Column(name = "status_offers", nullable = false)
+    private boolean statusOffers;
 
 }
