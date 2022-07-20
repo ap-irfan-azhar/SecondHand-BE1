@@ -127,5 +127,16 @@ public class ProductServiceImpl implements ProductService {
         return product;
     }
 
+    @Override
+    public List<Product> findBySellerId(Long sellerId) {
+        List<Product> product = productRepository.findBySellerId(sellerId);
+        if (product.isEmpty()) {
+            throw new IllegalArgumentException(
+                    String.format("Product with sellerId %s not found", sellerId)
+            );
+        }
+        return product;
+    }
+
 }
 

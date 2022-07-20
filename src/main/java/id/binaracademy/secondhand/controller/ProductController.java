@@ -71,4 +71,9 @@ public class ProductController {
         return productService.updateProduct(id, product);
     }
 
+    @GetMapping("/findBySellerId/{sellerId}")
+    public List<Product> findBySellerId(@RequestParam Long sellerId){
+        return productService.findBySellerId(sellerId);
+    }
+
 }

@@ -16,4 +16,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("Select c from Product c where c.name like %:name%")
     List<Product>findNames(String name);
+
+    @Query("Select c from Product c where c.sellerId = :sellerId")
+    List<Product> findBySellerId(Long sellerId);
+
+    @Query("Select c from Product c where c.status='sold' ")
+    List<Product> findProductSold();
+
+
 }
