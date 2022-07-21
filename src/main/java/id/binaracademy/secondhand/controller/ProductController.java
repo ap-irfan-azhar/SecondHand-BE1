@@ -4,25 +4,17 @@ import id.binaracademy.secondhand.dto.ProductDto;
 import id.binaracademy.secondhand.entity.Product;
 import id.binaracademy.secondhand.repository.ProductRepository;
 import id.binaracademy.secondhand.service.impl.ProductServiceImpl;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.apache.http.protocol.HTTP;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/product")
 public class ProductController {
 
@@ -56,8 +48,9 @@ public class ProductController {
         return ResponseEntity.ok(productRepository.findByNameLike(name));
     }
 
+    @CrossOrigin
     @PutMapping("/{id}")
-    public Product updateProduct(@PathVariable Long id, @RequestBody ProductDto product){
+    public Product updateProduct(@PathVariable Long id, @ModelAttribute ProductDto product) throws Exception {
         return productService.updateProduct(id, product);
     }
     @DeleteMapping("/{id}")
@@ -66,12 +59,21 @@ public class ProductController {
     }
 
 
+    @CrossOrigin
     @RequestMapping(value = "/register", method = RequestMethod.POST, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public Product registerProduct(@ModelAttribute ProductDto product) throws Exception{
         return productService.saveProduct(product);
-
     }
 
+    @CrossOrigin
+    @RequestMapping(value = "/update1", method = RequestMethod.PUT, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public Product updateProduct1(@RequestParam Long id, @ModelAttribute ProductDto product) throws Exception {
+        return productService.updateProduct(id, product);
+    }
 
+    @GetMapping("/findBySellerId/{sellerId}")
+    public List<Product> findBySellerId(@RequestParam Long sellerId){
+        return productService.findBySellerId(sellerId);
+    }
 
 }

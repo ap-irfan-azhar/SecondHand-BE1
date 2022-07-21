@@ -1,0 +1,6 @@
+[init]
+	defaultBranch = none
+[fetch]
+	recurseSubmodules = false
+[http "https://gitlab.com"]
+	sslCAInfo = D:\\finBIn\\secondhandbe\\builds\\zB9rXkrq\\0\\rizk-yulianto\\secondhandbe.tmp\\CI_SERVER_TLS_CA_FILE
