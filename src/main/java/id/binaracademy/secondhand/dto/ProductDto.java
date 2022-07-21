@@ -14,4 +14,5 @@ public class ProductDto implements Serializable {
     private final String status;
     MultipartFile file;
     private final Long sellerId;
+
 }

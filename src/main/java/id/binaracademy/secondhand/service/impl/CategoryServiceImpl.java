@@ -4,6 +4,10 @@ import id.binaracademy.secondhand.entity.Category;
 import id.binaracademy.secondhand.repository.CategoryRepository;
 import id.binaracademy.secondhand.service.interfaces.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -30,8 +34,16 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<Category> findAllCategories() {
-        return categoryRepository.findAll();
+    public Page<Category> findAllCategories(int page, int size, String sortBy, String sortType) {
+        Sort sort;
+        if (sortType.equals("desc")) {
+            sort = Sort.by(sortBy).descending();
+        } else {
+            sort = Sort.by(sortBy).ascending();
+        }
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        return categoryRepository.findAll(pageable);
     }
 
     @Override

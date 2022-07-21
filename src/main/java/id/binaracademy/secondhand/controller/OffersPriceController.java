@@ -25,8 +25,23 @@ public class OffersPriceController {
         return offersPriceService.findAllOffers();
     }
 
-    @GetMapping("/list/{id}")
-    public List<OffersPrice> getAllOffersByProductId(Long id) {
+    @GetMapping("/list/product/{id}")
+    public List<OffersPrice> getAllOffersByProductId(@RequestParam Long id) {
         return offersPriceService.findAllOffersByProductId(id);
+    }
+
+    @GetMapping("/list/seller/{id}")
+    public List<OffersPrice> getAllOffersBySellerId(@RequestParam Long id) {
+        return offersPriceService.findAllOffersBySellerId(id);
+    }
+
+    @GetMapping("/list/buyer/{id}")
+    public List<OffersPrice> getAllOffersByBuyerId(@RequestParam Long id) {
+        return offersPriceService.findAllOffersByBuyerId(id);
+    }
+
+    @GetMapping("/list/IdBuyerAndSeller")
+    public List<OffersPrice> getAllOffersByBuyerAndSellerId(@RequestBody Long buyerId, @RequestBody Long sellerId) {
+        return offersPriceService.findAllOffersByBuyerAndSellerId(buyerId, sellerId);
     }
 }

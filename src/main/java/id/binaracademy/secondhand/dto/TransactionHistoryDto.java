@@ -11,6 +11,7 @@ public class TransactionHistoryDto implements Serializable {
     private final Long buyerId;
     private final Long sellerId;
     private final Long productId;
+    private final Long offersId;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private final Date dateSold;

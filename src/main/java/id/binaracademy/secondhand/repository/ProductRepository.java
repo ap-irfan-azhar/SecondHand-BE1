@@ -14,6 +14,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findByNameLike(String name);
 
+
     @Query("Select c from Product c where c.name like %:name%")
     List<Product>findNames(String name);
 
@@ -22,6 +23,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("Select c from Product c where c.status='sold' ")
     List<Product> findProductSold();
+
 
 
 }

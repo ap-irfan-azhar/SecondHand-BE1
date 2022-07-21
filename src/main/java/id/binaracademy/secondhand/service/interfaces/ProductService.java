@@ -17,4 +17,7 @@ public interface ProductService {
 
     List<Product> findBySellerId(Long sellerId);
 
+    List<Product> findAllSoldProducts();
+
+
 }

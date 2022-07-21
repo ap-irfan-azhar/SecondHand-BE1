@@ -21,6 +21,7 @@ public class TransactionHistory {
     private Long buyerId;
     private Long sellerId;
     private Long productId;
+    private Long offersId;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss", iso = DateTimeFormat.ISO.DATE_TIME )
     private Date dateSold;

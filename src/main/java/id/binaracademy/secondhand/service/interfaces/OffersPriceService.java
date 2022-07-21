@@ -10,4 +10,10 @@ public interface OffersPriceService {
     OffersPrice saveOffer (OffersPriceDto1 offersPrice);
     List<OffersPrice> findAllOffers();
     List<OffersPrice> findAllOffersByProductId(Long id);
+
+    List<OffersPrice> findAllOffersByBuyerId(Long id);
+
+    List<OffersPrice> findAllOffersBySellerId(Long id);
+
+    List<OffersPrice> findAllOffersByBuyerAndSellerId(Long buyerId, Long sellerId);
 }

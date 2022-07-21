@@ -1,24 +1,25 @@
 package id.binaracademy.secondhand.service.interfaces;
 
 
-import id.binaracademy.secondhand.dto.UserInfoDto;
+import id.binaracademy.secondhand.dto.UpdateUserInfoDto;
 import id.binaracademy.secondhand.dto.UserRegisterDto;
 import id.binaracademy.secondhand.entity.User;
+import id.binaracademy.secondhand.entity.UserInfo;
+import org.springframework.data.domain.Page;
 
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public interface UserService {
     User saveUser(UserRegisterDto user);
-    User findUserById(Long id);
+    UserInfo findUserById(Long id);
     User findUserByUsername(String username);
-    List<User> findAllUsers();
-    User updateUser(Long id, UserRegisterDto user);
+    User findUserByEmail(String email);
+    Page<UserInfo> findAllUsers(int page, int size, String sortBy, String sortType);
+    UserInfo updateUser(Long id, UpdateUserInfoDto user);
     void deleteUser(Long id);
-    User addRoleToUser(Long userId, String roleName);
-    String login(String username, String password);
-    UserInfoDto findUserInfoDtoById(Long id);
-    List<UserInfoDto> findAllUserInfoDtos();
-
-    User updateUserInfo(Long id, UserInfoDto userInfoDto);
+    UserInfo registerAsSeller(Long userId);
+    void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException;
 }
 

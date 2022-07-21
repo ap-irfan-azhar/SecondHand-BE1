@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin
@@ -36,8 +35,8 @@ public class ProductController {
     }
 
     @GetMapping("/search/")
-    public Product findProductByName(@RequestParam String name){
-        return productService.findProductByName(name);
+    public List<Product> findProductByName(@RequestParam String name){
+        return productService.findByNameLike(name);
     }
     @GetMapping("/findByNameLike/")
     public List<Product> findByNameLike(@RequestParam String name){
@@ -58,6 +57,7 @@ public class ProductController {
     public void deleteProduct(@PathVariable Long id){
         productService.deleteProduct(id);
     }
+
 
     @CrossOrigin
     @RequestMapping(value = "/register", method = RequestMethod.POST, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})

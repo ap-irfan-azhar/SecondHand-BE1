@@ -23,6 +23,7 @@ public class TransactionHistoryImpl implements TransactionHistoryService {
         transactionHistory.setPrice(transactionHistoryDto.getPrice());
         transactionHistory.setBuyerId(transactionHistoryDto.getBuyerId());
         transactionHistory.setSellerId(transactionHistoryDto.getSellerId());
+        transactionHistory.setOffersId(transactionHistoryDto.getOffersId());
         transactionHistory.setProductId(transactionHistoryDto.getProductId());
         transactionHistory.setDateSold(transactionHistoryDto.getDateSold());
         return transactionHistoryRepository.save(transactionHistory);

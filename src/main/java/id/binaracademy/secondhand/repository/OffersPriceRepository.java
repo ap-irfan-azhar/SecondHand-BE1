@@ -9,4 +9,13 @@ import java.util.List;
 public interface OffersPriceRepository extends JpaRepository<OffersPrice, Long> {
     @Query("SELECT o FROM OffersPrice o WHERE o.productId = :id")
     List<OffersPrice> findAllByProductId(Long id);
+
+    @Query("SELECT o FROM OffersPrice o WHERE o.buyersId = :id")
+    List<OffersPrice> findAllByBuyersId(Long id);
+
+    @Query("SELECT o FROM OffersPrice o WHERE o.sellersId = :id")
+    List<OffersPrice> findAllBySellersId(Long id);
+
+    @Query("SELECT o FROM OffersPrice o WHERE o.buyersId = :buyerId AND o.sellersId = :sellerId")
+    List<OffersPrice> findAllByBuyersIdAndSellersId(Long buyerId, Long sellerId);
 }

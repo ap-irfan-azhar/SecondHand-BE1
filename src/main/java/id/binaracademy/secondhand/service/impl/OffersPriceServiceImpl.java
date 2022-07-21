@@ -46,4 +46,35 @@ public class OffersPriceServiceImpl implements OffersPriceService {
         }
 
     }
+
+    @Override
+    public List<OffersPrice> findAllOffersByBuyerId(Long id) {
+        Optional<OffersPrice> offersPrice = offersPriceRepository.findById(id);
+
+        if (offersPrice.isPresent()) {
+            return offersPriceRepository.findAllByBuyersId(id);
+        } else {
+            throw new IllegalArgumentException(
+                    String.format("OffersPrice with Buyer id %s not found", id)
+            );
+        }
+    }
+
+    @Override
+    public List<OffersPrice> findAllOffersBySellerId(Long id) {
+        Optional<OffersPrice> offersPrice = offersPriceRepository.findById(id);
+
+        if (offersPrice.isPresent()) {
+            return offersPriceRepository.findAllBySellersId(id);
+        } else {
+            throw new IllegalArgumentException(
+                    String.format("OffersPrice with Seller id %s not found", id)
+            );
+        }
+    }
+
+    @Override
+    public List<OffersPrice> findAllOffersByBuyerAndSellerId(Long buyerId, Long sellerId) {
+        return offersPriceRepository.findAllByBuyersIdAndSellersId(buyerId, sellerId);
+    }
 }
