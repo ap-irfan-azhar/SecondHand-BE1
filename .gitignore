@@ -4,6 +4,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+gitlab-runner-windows-amd64_2.exe
+secondhand-0.0.1-SNAPSHOT.jar
+config.toml
 data/
 
 ### STS ###
