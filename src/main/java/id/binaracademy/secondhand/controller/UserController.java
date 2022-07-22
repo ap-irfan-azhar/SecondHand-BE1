@@ -3,7 +3,7 @@ package id.binaracademy.secondhand.controller;
 import id.binaracademy.secondhand.dto.UpdateUserInfoDto;
 import id.binaracademy.secondhand.dto.UserRegisterDto;
 import id.binaracademy.secondhand.entity.Role;
-import id.binaracademy.secondhand.entity.User;
+import id.binaracademy.secondhand.entity.UserEntity;
 import id.binaracademy.secondhand.entity.UserInfo;
 import id.binaracademy.secondhand.service.impl.RoleServiceImpl;
 import id.binaracademy.secondhand.service.impl.UserServiceImpl;
@@ -54,7 +54,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public User registerUser(@RequestBody UserRegisterDto user) {
+    public UserEntity registerUser(@RequestBody UserRegisterDto user) {
         return userService.saveUser(user);
     }
 

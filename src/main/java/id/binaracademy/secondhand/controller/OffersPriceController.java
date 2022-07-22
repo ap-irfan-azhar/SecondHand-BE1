@@ -1,5 +1,6 @@
 package id.binaracademy.secondhand.controller;
 
+import id.binaracademy.secondhand.dto.OffersPriceDto;
 import id.binaracademy.secondhand.dto.OffersPriceDto1;
 import id.binaracademy.secondhand.entity.OffersPrice;
 import id.binaracademy.secondhand.service.interfaces.OffersPriceService;
@@ -43,5 +44,11 @@ public class OffersPriceController {
     @GetMapping("/list/IdBuyerAndSeller")
     public List<OffersPrice> getAllOffersByBuyerAndSellerId(@RequestBody Long buyerId, @RequestBody Long sellerId) {
         return offersPriceService.findAllOffersByBuyerAndSellerId(buyerId, sellerId);
+    }
+
+    @PostMapping("/tawar1")
+    public OffersPrice postOffer1(@RequestBody OffersPriceDto offersPrice) {
+
+        return offersPriceService.saveOffer1(offersPrice);
     }
 }

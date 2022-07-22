@@ -3,6 +3,9 @@ package id.binaracademy.secondhand.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Data
@@ -27,5 +30,10 @@ public class OffersPrice {
     private int buyersPrice;
     @Column(name = "status_offers", nullable = false)
     private boolean statusOffers;
+
+
+    @ManyToOne
+    @JoinColumn(name = "products_id")
+    private Product products;
 
 }

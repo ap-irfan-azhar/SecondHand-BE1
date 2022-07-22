@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import id.binaracademy.secondhand.dto.UpdateUserInfoDto;
 import id.binaracademy.secondhand.dto.UserRegisterDto;
 import id.binaracademy.secondhand.entity.Role;
-import id.binaracademy.secondhand.entity.User;
+import id.binaracademy.secondhand.entity.UserEntity;
 import id.binaracademy.secondhand.entity.UserInfo;
 import id.binaracademy.secondhand.repository.UserInfoRepository;
 import id.binaracademy.secondhand.repository.UserRepository;
@@ -52,9 +52,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 
     @Override
-    public User saveUser(UserRegisterDto user) {
-        Optional<User> foundUserByUsername = userRepository.findByUsername(user.getUsername());
-        Optional<User> foundUserByEmail = userRepository.findByEmail(user.getEmail());
+    public UserEntity saveUser(UserRegisterDto user) {
+        Optional<UserEntity> foundUserByUsername = userRepository.findByUsername(user.getUsername());
+        Optional<UserEntity> foundUserByEmail = userRepository.findByEmail(user.getEmail());
 
         boolean isEmailValid = Pattern
                 .compile(EMAIL_REGEX_PATTERN)
@@ -80,13 +80,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 userRole
         ));
         String encryptedPassword = bCryptPasswordEncoder.encode(user.getPassword());
-        User userToSave = new User();
-        userToSave.setUsername(user.getUsername());
-        userToSave.setEmail(user.getEmail());
-        userToSave.setPassword(encryptedPassword);
-        userToSave.setRoles(roles);
+        UserEntity userEntityToSave = new UserEntity();
+        userEntityToSave.setUsername(user.getUsername());
+        userEntityToSave.setEmail(user.getEmail());
+        userEntityToSave.setPassword(encryptedPassword);
+        userEntityToSave.setRoles(roles);
 
-        return userRepository.save(userToSave);
+        return userRepository.save(userEntityToSave);
     }
 
     @Override
@@ -101,8 +101,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User findUserByUsername(String username) {
-        Optional<User> user = userRepository.findByUsername(username);
+    public UserEntity findUserByUsername(String username) {
+        Optional<UserEntity> user = userRepository.findByUsername(username);
         if (!user.isPresent()) {
             throw new IllegalArgumentException(
                     String.format("User with username %s not found", username)
@@ -112,8 +112,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User findUserByEmail(String email) {
-        Optional<User> user = userRepository.findByEmail(email);
+    public UserEntity findUserByEmail(String email) {
+        Optional<UserEntity> user = userRepository.findByEmail(email);
         if (!user.isPresent()) {
             throw new IllegalArgumentException(
                     String.format("User with email %s not found", email)
@@ -191,7 +191,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void deleteUser(Long id) {
-        Optional<User> user = userRepository.findById(id);
+        Optional<UserEntity> user = userRepository.findById(id);
         if (!user.isPresent()) {
             throw new IllegalArgumentException(
                     String.format("User with id %s not found", id.toString())
@@ -232,17 +232,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 JWTVerifier verifier = JWT.require(algorithm).build();
                 DecodedJWT decodedJWT = verifier.verify(refreshToken);
                 String username = decodedJWT.getSubject();
-                User user;
+                UserEntity userEntity;
                 try {
-                    user = userRepository.findByUsername(username).get();
+                    userEntity = userRepository.findByUsername(username).get();
                 } catch (Exception e) {
                     throw new NotFoundException(e.getMessage());
                 }
                 String accessToken = JWT.create()
-                        .withSubject(user.getUsername())
+                        .withSubject(userEntity.getUsername())
                         .withExpiresAt(new Date(System.currentTimeMillis() + 12 * 60 * 60 * 1000))
                         .withIssuer(request.getRequestURL().toString())
-                        .withClaim("roles", user.getRoles().stream().map(Role::getName).collect(Collectors.toList()))
+                        .withClaim("roles", userEntity.getRoles().stream().map(Role::getName).collect(Collectors.toList()))
                         .sign(algorithm);
                 Map<String, String> tokens = new HashMap<>();
                 tokens.put("access_token", accessToken);
@@ -265,15 +265,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
-        User user = null;
+        UserEntity userEntity = null;
 
         if (Pattern.compile(EMAIL_REGEX_PATTERN).matcher(usernameOrEmail).matches()) {
-            user = findUserByEmail(usernameOrEmail);
+            userEntity = findUserByEmail(usernameOrEmail);
         } else {
-            user = findUserByUsername(usernameOrEmail);
+            userEntity = findUserByUsername(usernameOrEmail);
         }
 
-        if (user == null) {
+        if (userEntity == null) {
             throw new UsernameNotFoundException(
                     String.format(
                             "User with username %s not found",
@@ -282,7 +282,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             );
         }
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        user.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
+        userEntity.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
+        return new org.springframework.security.core.userdetails.User(userEntity.getUsername(), userEntity.getPassword(), authorities);
     }
 }

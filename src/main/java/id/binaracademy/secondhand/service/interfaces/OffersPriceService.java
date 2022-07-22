@@ -1,5 +1,6 @@
 package id.binaracademy.secondhand.service.interfaces;
 
+import id.binaracademy.secondhand.dto.OffersPriceDto;
 import id.binaracademy.secondhand.dto.OffersPriceDto1;
 import id.binaracademy.secondhand.entity.OffersPrice;
 
@@ -16,4 +17,6 @@ public interface OffersPriceService {
     List<OffersPrice> findAllOffersBySellerId(Long id);
 
     List<OffersPrice> findAllOffersByBuyerAndSellerId(Long buyerId, Long sellerId);
+
+    OffersPrice saveOffer1(OffersPriceDto offersPrice);
 }
