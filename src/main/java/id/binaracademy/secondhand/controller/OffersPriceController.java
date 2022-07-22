@@ -21,6 +21,7 @@ public class OffersPriceController {
         return offersPriceService.saveOffer(offersPrice);
     }
 
+    @GetMapping("/tawar/{id}")
     public OffersPrice getOffer(@PathVariable Long id) {
         return offersPriceService.getOffer(id);
     }
