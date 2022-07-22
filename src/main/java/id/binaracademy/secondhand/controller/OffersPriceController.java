@@ -51,6 +51,11 @@ public class OffersPriceController {
         return offersPriceService.findAllOffersByBuyerAndSellerId(buyerId, sellerId);
     }
 
+    @GetMapping("/list/buyerAndSeller/{buyerId}/{sellerId}")
+    public List<OffersPrice> getByProductandSellerId(@RequestParam Long buyerId, @RequestParam Long sellerId) {
+        return offersPriceService.findAllOffersByProductAndSellerId(buyerId, sellerId);
+    }
+
     @PostMapping("/tawar1")
     public OffersPrice postOffer1(@RequestBody OffersPriceDto offersPrice) {
 

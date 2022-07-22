@@ -110,4 +110,9 @@ public class OffersPriceServiceImpl implements OffersPriceService {
             );
         }
     }
+
+    @Override
+    public List<OffersPrice> findAllOffersByProductAndSellerId(Long buyerId, Long sellerId) {
+        return offersPriceRepository.findAllByProductIdAndSellersId(buyerId, sellerId);
+    }
 }
