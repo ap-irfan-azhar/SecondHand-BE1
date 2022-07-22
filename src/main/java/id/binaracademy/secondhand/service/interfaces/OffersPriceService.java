@@ -19,4 +19,6 @@ public interface OffersPriceService {
     List<OffersPrice> findAllOffersByBuyerAndSellerId(Long buyerId, Long sellerId);
 
     OffersPrice saveOffer1(OffersPriceDto offersPrice);
+
+    OffersPrice getOffer(Long id);
 }

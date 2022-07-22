@@ -97,4 +97,17 @@ public class OffersPriceServiceImpl implements OffersPriceService {
         offersPrice1.setProducts(productServiceImpl.findProductById(offersPrice.getProductId()));
         return offersPriceRepository.save(offersPrice1);
     }
+
+    @Override
+    public OffersPrice getOffer(Long id) {
+        Optional<OffersPrice> offersPrice = offersPriceRepository.findById(id);
+
+        if (offersPrice.isPresent()) {
+            return offersPrice.get();
+        } else {
+            throw new IllegalArgumentException(
+                    String.format("OffersPrice with id %s not found", id)
+            );
+        }
+    }
 }

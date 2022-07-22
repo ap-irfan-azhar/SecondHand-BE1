@@ -21,6 +21,10 @@ public class OffersPriceController {
         return offersPriceService.saveOffer(offersPrice);
     }
 
+    public OffersPrice getOffer(@PathVariable Long id) {
+        return offersPriceService.getOffer(id);
+    }
+
     @GetMapping("/list")
     public List<OffersPrice> getAllOffers() {
         return offersPriceService.findAllOffers();
