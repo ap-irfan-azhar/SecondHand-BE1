@@ -16,6 +16,6 @@ public interface OffersPriceRepository extends JpaRepository<OffersPrice, Long> 
     @Query("SELECT o FROM OffersPrice o WHERE o.sellersId = :id")
     List<OffersPrice> findAllBySellersId(Long id);
 
-    @Query("SELECT o FROM OffersPrice o WHERE o.buyersId = :buyerId AND o.sellersId = :sellerId")
+    @Query("SELECT o FROM OffersPrice o WHERE o.productId = :buyerId AND o.sellersId = :sellerId")
     List<OffersPrice> findAllByBuyersIdAndSellersId(Long buyerId, Long sellerId);
 }
