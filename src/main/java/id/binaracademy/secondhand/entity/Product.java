@@ -40,4 +40,7 @@ public class Product {
 
     @Column(name = "photosUrl", nullable = false)
     private String photoUrl;
+
+    @Column(name = "sellerId", nullable = false)
+    private Long sellerId;
 }

@@ -14,11 +14,16 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findByNameLike(String name);
 
-//    @Query("Select c from Product c where c.name like %:name%", nativeQuery = true")
-//    List<Product>findNames(String name);
 
-//    @Query(value = "SELECT * FROM Product p WHERE p.name like = %:name:%",
-//            nativeQuery = true)
-//    List<Product>findNameLike(String name);
+    @Query("Select c from Product c where c.name like %:name%")
+    List<Product>findNames(String name);
+
+    @Query("Select c from Product c where c.sellerId = :sellerId")
+    List<Product> findBySellerId(Long sellerId);
+
+    @Query("Select c from Product c where c.status='sold' ")
+    List<Product> findProductSold();
+
+
 
 }

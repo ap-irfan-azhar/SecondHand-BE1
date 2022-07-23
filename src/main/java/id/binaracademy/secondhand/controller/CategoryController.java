@@ -1,7 +1,6 @@
 package id.binaracademy.secondhand.controller;
 
 import id.binaracademy.secondhand.entity.Category;
-import id.binaracademy.secondhand.entity.User;
 import id.binaracademy.secondhand.service.impl.CategoryServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -63,4 +62,6 @@ public class CategoryController {
     public void deleteCategory(@PathVariable Long id) {
         categoryService.deleteCategory(id);
     }
+
+
 }
