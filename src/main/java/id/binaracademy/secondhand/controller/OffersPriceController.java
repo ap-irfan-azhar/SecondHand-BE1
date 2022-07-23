@@ -56,6 +56,8 @@ public class OffersPriceController {
         return offersPriceService.findAllOffersByProductAndSellerId(buyerId, sellerId);
     }
 
+
+
     @PostMapping("/tawar1")
     public OffersPrice postOffer1(@RequestBody OffersPriceDto offersPrice) {
 

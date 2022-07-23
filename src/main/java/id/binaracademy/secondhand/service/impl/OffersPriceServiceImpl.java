@@ -3,7 +3,6 @@ package id.binaracademy.secondhand.service.impl;
 import id.binaracademy.secondhand.dto.OffersPriceDto;
 import id.binaracademy.secondhand.dto.OffersPriceDto1;
 import id.binaracademy.secondhand.entity.OffersPrice;
-import id.binaracademy.secondhand.entity.Product;
 import id.binaracademy.secondhand.repository.OffersPriceRepository;
 import id.binaracademy.secondhand.service.interfaces.OffersPriceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,4 +114,6 @@ public class OffersPriceServiceImpl implements OffersPriceService {
     public List<OffersPrice> findAllOffersByProductAndSellerId(Long buyerId, Long sellerId) {
         return offersPriceRepository.findAllByProductIdAndSellersId(buyerId, sellerId);
     }
+
+
 }
